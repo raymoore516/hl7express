@@ -47,7 +47,7 @@ public class HL7Component implements HL7Express<HL7Component> {
         for (char c : str.toCharArray()) {
             if (c == ec.getSubcomponentSeparator()) {
                 // Add subcomponent and reset builder
-                subcomponents.add(sb.toString());
+                subcomponents.add(ec.unescape(sb.toString()));
                 sb.setLength(0);
             } else {
                 sb.append(c);
@@ -55,7 +55,7 @@ public class HL7Component implements HL7Express<HL7Component> {
         }
 
         if (sb.length() > 0) {
-            subcomponents.add(sb.toString());
+            subcomponents.add(ec.unescape(sb.toString()));
         }
 
         return this;
@@ -75,7 +75,7 @@ public class HL7Component implements HL7Express<HL7Component> {
             if (i > 0) {
                 sb.append(ec.getSubcomponentSeparator());
             }
-            sb.append(subcomponents.get(i));
+            sb.append(ec.escape(subcomponents.get(i)));
         }
 
         return sb.toString();

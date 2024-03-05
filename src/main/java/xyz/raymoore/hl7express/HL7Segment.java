@@ -47,7 +47,7 @@ public class HL7Segment implements HL7Express<HL7Segment> {
     @Override
     public HL7Segment fromString(String str, HL7Encoding ec) {
         StringBuilder sb = new StringBuilder();
-        String delimiter = Character.toString(ec.getFieldRepSeparator());
+        String delimiter = Character.toString(ec.getRepetitionSeparator());
 
         int num = -1;  // Increment to index 0 (not 1) for the segment code
         for (char c: str.toCharArray()) {
@@ -109,7 +109,7 @@ public class HL7Segment implements HL7Express<HL7Segment> {
             }
             for (int i = 0; i < fields.get(n).size(); i++) {
                 if (i > 0) {
-                    sb.append(ec.getFieldRepSeparator());
+                    sb.append(ec.getRepetitionSeparator());
                 }
                 sb.append(fields.get(n).get(i).toString(ec));
             }
