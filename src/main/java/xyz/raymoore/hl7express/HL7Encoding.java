@@ -69,13 +69,13 @@ public class HL7Encoding {
     public String unescape(String str) throws HL7Exception {
         StringBuilder sb = new StringBuilder();
         StringBuilder eb = new StringBuilder();
-        boolean isEscaped = false;
+        boolean escapeMode = false;
 
         for (char c : str.toCharArray()) {
             if (c == escapeCharacter) {
-                isEscaped = !isEscaped;
+                escapeMode = !escapeMode;
                 eb.append(c);
-                if (!isEscaped) {
+                if (!escapeMode) {
                     CharSequence seq = eb.toString();
                     eb.setLength(0);  // Reset escape sequence builder
                     if (FIELD_ESCAPE_SEQ.equals(seq)) {
@@ -98,7 +98,7 @@ public class HL7Encoding {
                         throw new HL7Exception(String.format("Unrecognized escape sequence [seq: %s]", seq));
                     }
                 }
-            } else if (isEscaped) {
+            } else if (escapeMode) {
                 eb.append(c);
             } else {
                 sb.append(c);  // This is the default scenario with no escape considerations
@@ -107,6 +107,8 @@ public class HL7Encoding {
 
         return sb.toString();
     }
+
+    // ---
 
     public char getFieldSeparator() {
         return fieldSeparator;
