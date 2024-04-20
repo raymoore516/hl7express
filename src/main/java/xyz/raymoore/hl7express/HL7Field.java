@@ -19,6 +19,10 @@ public class HL7Field implements HL7Express<HL7Field> {
 
     // ---
 
+    public static Builder builder() {
+        return new Builder();
+    }
+
     public HL7Component get(int component) {
         return components.get(component);  // Most components are simple values
     }
@@ -156,5 +160,26 @@ public class HL7Field implements HL7Express<HL7Field> {
         }
 
         return sb.toString();
+    }
+
+
+    // ---
+
+    public static class Builder {
+        private final HL7Field field = new HL7Field();
+
+        public Builder component(int component, HL7Component data) {
+            this.field.set(component, data);
+            return this;
+        }
+
+        public Builder component(int component, String... values) {
+            this.field.setValues(component, values);
+            return this;
+        }
+
+        public HL7Field build() {
+            return field;
+        }
     }
 }

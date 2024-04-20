@@ -13,10 +13,14 @@ public class HL7Segment implements HL7Express<HL7Segment> {
     }
 
     public HL7Segment(String code) {
-        this.fields.put(0, List.of(HL7Field.of(code)));
+        setCode(code);
     }
 
     // ---
+
+    public static Builder builder(String code) {
+        return new Builder(code);
+    }
 
     public String getCode() {
         return getField(0) == null ? null : getField(0).getValue();
@@ -28,6 +32,10 @@ public class HL7Segment implements HL7Express<HL7Segment> {
         }
 
         return fields.get(field).get(0);  // Most fields are non-repeating
+    }
+
+    public void setCode(String code) {
+        setField(0, HL7Field.of(code));
     }
 
     public void setField(int field, String value) {
@@ -118,7 +126,39 @@ public class HL7Segment implements HL7Express<HL7Segment> {
         return sb.toString();
     }
 
+    // ---
+
+    public static class Builder {
+        private final HL7Segment segment;
+
+        public Builder(String code) {
+            this.segment = new HL7Segment(code);
+        }
+
+        public Builder field(int field, HL7Field... data) {
+            this.segment.setField(field, data);
+            return this;
+        }
+
+        public Builder field(int field, String value) {
+            this.segment.setField(field, value);
+            return this;
+        }
+
+        public Builder field(int field, char value) {
+            return field(field, HL7Field.of(value));
+        }
+
+        public HL7Segment build() {
+            return segment;
+        }
+    }
+
+    // ---
+
     public interface Code {
-        String MSH = "MSH";  // TODO: Add all standard HL7 segment codes
+        // TODO: Add all standard HL7 segment codes
+        String MSH = "MSH";
+        String NTE = "NTE";
     }
 }
